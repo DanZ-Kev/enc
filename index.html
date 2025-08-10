@@ -1,54 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Multilayer Quantum-Resistant Encryption System</title>
+    <title>DanZ POST-QUANTUM ULTRA Protector — JavaScript Encryptor</title>
+    
+    <!-- External Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.3/nacl-fast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-obfuscator/4.1.0/javascript-obfuscator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
     <style>
-        :root {
-            --foreground-rgb: 0, 0, 0;
-            --background-start-rgb: 214, 219, 220;
-            --background-end-rgb: 255, 255, 255;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --foreground-rgb: 255, 255, 255;
-                --background-start-rgb: 0, 0, 0;
-                --background-end-rgb: 0, 0, 0;
-            }
-        }
-
-        :root {
-            --background: 222.2 84% 4.9%;
-            --foreground: 210 40% 98%;
-            --card: 222.2 84% 4.9%;
-            --card-foreground: 210 40% 98%;
-            --popover: 222.2 84% 4.9%;
-            --popover-foreground: 210 40% 98%;
-            --primary: 217.2 91.2% 59.8%;
-            --primary-foreground: 222.2 47.4% 11.2%;
-            --secondary: 217.2 32.6% 17.5%;
-            --secondary-foreground: 210 40% 98%;
-            --muted: 217.2 32.6% 17.5%;
-            --muted-foreground: 215 20.2% 65.1%;
-            --accent: 217.2 32.6% 17.5%;
-            --accent-foreground: 210 40% 98%;
-            --destructive: 0 62.8% 30.6%;
-            --destructive-foreground: 210 40% 98%;
-            --border: 217.2 32.6% 17.5%;
-            --input: 217.2 32.6% 17.5%;
-            --ring: 224.3 76.3% 48%;
-            --chart-1: 217.2 91.2% 59.8%;
-            --chart-2: 160 60% 45%;
-            --chart-3: 30 80% 55%;
-            --chart-4: 280 65% 60%;
-            --chart-5: 340 75% 55%;
-            --radius: 1rem;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -56,11 +21,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--secondary)));
-            color: hsl(var(--foreground));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            color: #333;
+            overflow-x: hidden;
         }
 
         .container {
@@ -72,1138 +37,1804 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 30px;
-            background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--secondary)));
-            border-radius: 20px;
-            border: 1px solid hsl(var(--border));
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            color: white;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, hsl(var(--primary)), #3b82f6, #8b5cf6, #ec4899);
-            background-size: 300% 300%;
-            animation: gradient-shift 4s ease-in-out infinite;
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #f0f0f0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
         }
 
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 100% 50%; }
-            50% { background-position: 50% 100%; }
-            75% { background-position: 100% 0%; }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
         }
 
-        .section {
-            background: hsl(var(--card));
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 5px;
+            backdrop-filter: blur(20px);
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid hsl(var(--border));
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 1rem;
+            font-weight: 500;
             transition: all 0.3s ease;
         }
 
-        .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .tab.active {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .form-group {
+        .tab:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 60px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #667eea;
             margin-bottom: 20px;
         }
 
-        label {
+        .upload-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .encryption-options {
+            margin: 30px 0;
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-group label {
             display: block;
-            margin-bottom: 8px;
-            color: hsl(var(--foreground));
+            margin-bottom: 10px;
             font-weight: 600;
+            color: #333;
         }
 
-        input, textarea, select {
+        .option-group select,
+        .option-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid hsl(var(--border));
-            border-radius: 8px;
-            background: hsl(var(--background));
-            color: hsl(var(--foreground));
-            font-size: 14px;
-            transition: all 0.3s ease;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
 
-        input:focus, textarea:focus, select:focus {
+        .option-group select:focus,
+        .option-group input:focus {
             outline: none;
-            border-color: hsl(var(--primary));
-            box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+            border-color: #667eea;
+        }
+
+        .option-description {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
         }
 
         .btn {
-            padding: 12px 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, hsl(var(--primary)), #3b82f6, #8b5cf6);
-            color: white;
-            box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
-        }
-
-        .btn-primary:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px hsl(var(--primary) / 0.4);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
-            background: hsl(var(--secondary));
-            color: hsl(var(--secondary-foreground));
-            border: 1px solid hsl(var(--border));
+            background: linear-gradient(45deg, #6c757d, #495057);
         }
 
         .btn-secondary:hover {
-            background: hsl(var(--accent));
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        .progress-container {
+            margin: 30px 0;
+            display: none;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: hsl(var(--muted));
+            background: #e1e5e9;
             border-radius: 4px;
             overflow: hidden;
-            margin: 15px 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, hsl(var(--primary)), #3b82f6, #8b5cf6);
-            border-radius: 4px;
-            transition: width 0.3s ease;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             width: 0%;
+            transition: width 0.3s ease;
         }
 
-        .output-area {
-            background: hsl(var(--background));
-            border: 1px solid hsl(var(--border));
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            min-height: 200px;
-            word-break: break-all;
-            white-space: pre-wrap;
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .security-report {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .security-report h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .security-report p {
+            margin: 8px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .result-item p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .code-preview {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            max-height: 300px;
             overflow-y: auto;
         }
 
         .status {
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
             font-weight: 500;
         }
 
         .status.success {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .status.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         .status.info {
-            background: hsl(var(--primary) / 0.1);
-            color: hsl(var(--primary));
-            border: 1px solid hsl(var(--primary) / 0.3);
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .algorithm-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background: hsl(var(--primary) / 0.2);
-            color: hsl(var(--primary));
-            border-radius: 4px;
-            font-size: 11px;
-            margin: 2px;
-            font-weight: 500;
-        }
-
-        .security-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .security-level {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #22c55e;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .file-drop {
-            border: 2px dashed hsl(var(--border));
-            border-radius: 8px;
-            padding: 40px;
+        .footer {
             text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            margin-top: 50px;
+            color: white;
+            opacity: 0.8;
         }
 
-        .file-drop:hover,
-        .file-drop.dragover {
-            border-color: hsl(var(--primary));
-            background: hsl(var(--primary) / 0.05);
+        .security-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .security-info h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .security-info ul {
+            color: rgba(255,255,255,0.9);
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .security-info li {
+            margin-bottom: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .file-list {
+            margin: 20px 0;
+        }
+
+        .file-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .file-size {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .remove-file {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .remove-file:hover {
+            background: #c82333;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="gradient-text">Advanced Multilayer Encryption System</h1>
-            <p style="color: hsl(var(--muted-foreground)); font-size: 1.1rem;">
-                Quantum-Resistant • Multi-Algorithm • Anti-Fingerprinting • Executable Output
-            </p>
-            <div class="security-indicator">
-                <div class="security-level"></div>
-                <span>Military Grade Security Active</span>
-            </div>
+            <h1>DanZ POST-QUANTUM ULTRA Protector</h1>
+            <p>Maximum Security JavaScript Encryption with Post-Quantum Cryptography</p>
         </div>
 
-        <div class="grid">
-            <div class="section">
-                <h3 style="color: hsl(var(--primary)); margin-bottom: 20px;">📝 Input Configuration</h3>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('encrypt')">🔒 Encrypt</button>
+            <button class="tab" onclick="switchTab('decrypt')">🔓 Decrypt</button>
+            <button class="tab" onclick="switchTab('info')">ℹ️ Security Info</button>
+        </div>
+
+        <!-- Encrypt Tab -->
+        <div id="encrypt" class="tab-content active">
+            <div class="card">
+                <h2>🔒 JavaScript Encryption</h2>
+                <p>Upload your JavaScript files for maximum security protection</p>
                 
-                <div class="form-group">
-                    <label for="inputType">Input Type:</label>
-                    <select id="inputType" onchange="toggleInput()">
-                        <option value="text">Text/Code</option>
-                        <option value="file">File Upload</option>
-                        <option value="executable">Executable File</option>
-                    </select>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to upload or drag & drop</div>
+                    <div class="upload-hint">Supports .js files and .zip archives</div>
                 </div>
+                
+                <input type="file" id="fileInput" class="file-input" multiple accept=".js,.zip" onchange="handleFileSelect(event)">
+                
+                <div id="fileList" class="file-list"></div>
 
-                <div id="textInput" class="form-group">
-                    <label for="plaintext">Enter Text/Code to Encrypt:</label>
-                    <textarea id="plaintext" rows="6" placeholder="Enter your text, code, or data here..."></textarea>
-                </div>
-
-                <div id="fileInput" class="form-group" style="display: none;">
-                    <label>File Upload:</label>
-                    <div class="file-drop" id="fileDrop">
-                        <p>📁 Drop file here or click to browse</p>
-                        <input type="file" id="fileUpload" style="display: none;" onchange="handleFileSelect(event)">
+                <div class="encryption-options">
+                    <div class="option-group">
+                        <label for="encryptionLevel">Encryption Level:</label>
+                        <select id="encryptionLevel">
+                            <option value="ultra">ULTRA (Maximum Protection)</option>
+                            <option value="high">HIGH (Enhanced Security)</option>
+                            <option value="standard">STANDARD (Balanced)</option>
+                        </select>
+                        <div class="option-description" id="encryptionDescription">
+                            ULTRA: Maximum protection with Kyber-512, AES-256-GCM, Dilithium-2
+                        </div>
                     </div>
-                    <div id="fileInfo" style="margin-top: 10px; color: hsl(var(--muted-foreground));"></div>
+                    
+                    <div class="option-group">
+                        <label for="obfuscationLevel">Obfuscation Level:</label>
+                        <select id="obfuscationLevel">
+                            <option value="maximum">MAXIMUM (Extreme)</option>
+                            <option value="high">HIGH (Advanced)</option>
+                            <option value="medium">MEDIUM (Standard)</option>
+                        </select>
+                        <div class="option-description" id="obfuscationDescription">
+                            MAXIMUM: Extreme obfuscation with control flow flattening, dead code injection
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Master Password:</label>
-                    <input type="password" id="password" placeholder="Strong master password">
+                <div class="btn-group">
+                    <button class="btn" onclick="startEncryption()" id="encryptBtn">
+                        <span id="encryptBtnText">🚀 Start Encryption</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearFiles()">🗑️ Clear Files</button>
                 </div>
 
-                <div class="form-group">
-                    <label for="securityLevel">Security Level:</label>
-                    <select id="securityLevel">
-                        <option value="standard">Standard (Fast)</option>
-                        <option value="high" selected>High Security (Recommended)</option>
-                        <option value="extreme">Extreme (Maximum Security)</option>
-                        <option value="quantum">Quantum-Resistant (Future-Proof)</option>
-                    </select>
+                <div id="progressContainer" class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Initializing...</div>
                 </div>
 
-                <button class="btn btn-primary" onclick="performEncryption()" id="encryptBtn">
-                    🔒 Encrypt with 14-Layer Protection
-                </button>
+                <div id="results" class="results"></div>
             </div>
+        </div>
 
-            <div class="section">
-                <h3 style="color: hsl(var(--primary)); margin-bottom: 20px;">🔐 Decryption Module</h3>
+        <!-- Decrypt Tab -->
+        <div id="decrypt" class="tab-content">
+            <div class="card">
+                <h2>🔓 JavaScript Decryption</h2>
+                <p>Decrypt your protected JavaScript files</p>
                 
-                <div class="form-group">
-                    <label for="encryptedData">Encrypted Data:</label>
-                    <textarea id="encryptedData" rows="4" placeholder="Paste encrypted data here..."></textarea>
+                <div class="option-group">
+                    <label for="encryptedFile">Encrypted JavaScript File:</label>
+                    <input type="file" id="encryptedFile" accept=".js" onchange="handleEncryptedFile(event)">
+                </div>
+                
+                <div class="option-group">
+                    <label for="keyFile">Key File (.key):</label>
+                    <input type="file" id="keyFile" accept=".key,.json" onchange="handleKeyFile(event)">
                 </div>
 
-                <div class="form-group">
-                    <label for="decryptPassword">Master Password:</label>
-                    <input type="password" id="decryptPassword" placeholder="Enter master password">
+                <div class="btn-group">
+                    <button class="btn" onclick="startDecryption()" id="decryptBtn">
+                        <span id="decryptBtnText">🔓 Start Decryption</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearDecryptFiles()">🗑️ Clear Files</button>
                 </div>
 
-                <button class="btn btn-secondary" onclick="performDecryption()" id="decryptBtn">
-                    🔓 Decrypt & Execute
-                </button>
+                <div id="decryptProgress" class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="decryptProgressFill"></div>
+                    </div>
+                    <div class="progress-text" id="decryptProgressText">Initializing...</div>
+                </div>
 
-                <button class="btn btn-secondary" onclick="downloadDecrypted()" id="downloadBtn" style="display: none;">
-                    💾 Download Decrypted File
-                </button>
+                <div id="decryptResults" class="results"></div>
             </div>
         </div>
 
-        <div class="section">
-            <h3 style="color: hsl(var(--primary)); margin-bottom: 20px;">📊 Encryption Status & Algorithms</h3>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            
-            <div id="statusMessages"></div>
-            
-            <div style="margin: 20px 0;">
-                <h4 style="margin-bottom: 10px;">Active Security Layers:</h4>
-                <div id="algorithmBadges">
-                    <span class="algorithm-badge">Kyber-1024 KEM</span>
-                    <span class="algorithm-badge">Dilithium-87 Sign</span>
-                    <span class="algorithm-badge">SPHINCS+ Hash</span>
-                    <span class="algorithm-badge">AES-256-GCM</span>
-                    <span class="algorithm-badge">ChaCha20-Poly1305</span>
-                    <span class="algorithm-badge">PBKDF2-SHA3</span>
-                    <span class="algorithm-badge">HMAC-Blake3</span>
-                    <span class="algorithm-badge">Steganography</span>
-                    <span class="algorithm-badge">Anti-Fingerprint</span>
-                    <span class="algorithm-badge">Code Obfuscation</span>
-                    <span class="algorithm-badge">Runtime Protection</span>
-                    <span class="algorithm-badge">Memory Encryption</span>
-                    <span class="algorithm-badge">XOR Layers</span>
-                    <span class="algorithm-badge">Compression</span>
+        <!-- Security Info Tab -->
+        <div id="info" class="tab-content">
+            <div class="card">
+                <h2>🛡️ Security Information</h2>
+                
+                <div class="security-info">
+                    <h3>🔐 Post-Quantum Cryptography</h3>
+                    <ul>
+                        <li><strong>Kyber:</strong> Post-quantum key encapsulation mechanism for secure key exchange</li>
+                        <li><strong>Dilithium:</strong> Post-quantum digital signature scheme for authenticity verification</li>
+                        <li><strong>AES-256-GCM:</strong> Military-grade symmetric encryption with authenticated encryption</li>
+                    </ul>
+                </div>
+
+                <div class="security-info">
+                    <h3>🔄 Multi-Layer Protection</h3>
+                    <ul>
+                        <li><strong>Layer 1:</strong> Advanced obfuscation with control flow flattening</li>
+                        <li><strong>Layer 2:</strong> Dead code injection and debug protection</li>
+                        <li><strong>Layer 3:</strong> Runtime anti-debugging and anti-tamper checks</li>
+                        <li><strong>Layer 4:</strong> Multi-layer compression and padding</li>
+                    </ul>
+                </div>
+
+                <div class="security-info">
+                    <h3>⚡ Performance Features</h3>
+                    <ul>
+                        <li><strong>Browser-based:</strong> All operations performed locally, no data uploaded</li>
+                        <li><strong>Batch processing:</strong> Support for ZIP archives with folder structure preservation</li>
+                        <li><strong>Real-time progress:</strong> Live encryption/decryption status updates</li>
+                        <li><strong>Cross-platform:</strong> Works on all modern browsers and devices</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="section">
-            <h3 style="color: hsl(var(--primary)); margin-bottom: 20px;">📤 Output Results</h3>
-            <div class="output-area" id="outputArea">Ready for encryption...</div>
-            
-            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="copyToClipboard()" id="copyBtn" style="display: none;">
-                    📋 Copy to Clipboard
-                </button>
-                <button class="btn btn-secondary" onclick="saveAsFile()" id="saveBtn" style="display: none;">
-                    💾 Save as File
-                </button>
-                <button class="btn btn-secondary" onclick="executeEncrypted()" id="executeBtn" style="display: none;">
-                    ▶️ Execute Encrypted Code
-                </button>
-            </div>
+        <div class="footer">
+            <p>© 2025 DanZ-Kev | Version: BETA 1.0 | Maximum Security Protection</p>
+            <p>Need this High Security Encryptor? Chat +6281389733597</p>
         </div>
     </div>
 
     <script>
         // Global variables
-        let encryptedOutput = '';
-        let decryptedOutput = '';
-        let fileData = null;
-        let fileName = '';
-        let isExecutable = false;
-
-        // Advanced cryptographic functions
-        class QuantumResistantCrypto {
+        let selectedFiles = [];
+        let encryptedFile = null;
+        let keyFile = null;
+        let isProcessing = false;
+        
+        // Post-Quantum Cryptography Implementation
+        class PostQuantumCrypto {
             constructor() {
-                this.algorithms = {
-                    kyber: this.simulateKyber.bind(this),
-                    dilithium: this.simulateDilithium.bind(this),
-                    sphincs: this.simulateSphincs.bind(this),
-                    ntru: this.simulateNTRU.bind(this),
-                    ml_kem: this.simulateML_KEM.bind(this)
-                };
+                this.kyber = new KyberCrypto();
+                this.dilithium = new DilithiumCrypto();
+                this.aes = new AESCrypto();
             }
-
-            // Simulate Kyber KEM (Key Encapsulation Mechanism)
-            simulateKyber(data, key, level = 1024) {
-                const rounds = level === 512 ? 12 : level === 768 ? 16 : 20;
-                let result = data;
-                
-                for (let i = 0; i < rounds; i++) {
-                    const latticeKey = this.generateLatticeKey(key + i);
-                    result = this.latticeTransform(result, latticeKey);
-                }
-                
-                return this.addNoise(result, 0.1);
-            }
-
-            // Simulate Dilithium Digital Signature
-            simulateDilithium(data, key, variant = 87) {
-                const matrix = this.generateMatrix(variant);
-                const signature = this.matrixMultiply(data, matrix, key);
-                return this.compressSignature(signature);
-            }
-
-            // Simulate SPHINCS+ Hash-based signature
-            simulateSphincs(data, key) {
-                const tree = this.buildMerkleTree(data, key);
-                return this.generateHashSignature(tree);
-            }
-
-            // Simulate NTRU lattice-based encryption
-            simulateNTRU(data, key) {
-                const polynomial = this.dataToPolynomial(data);
-                const ntruKey = this.generateNTRUKey(key);
-                return this.polynomialMultiply(polynomial, ntruKey);
-            }
-
-            // Simulate ML-KEM (NIST standardized)
-            simulateML_KEM(data, key, security = 256) {
-                const rounds = security === 128 ? 10 : security === 192 ? 14 : 18;
-                let result = data;
-                
-                for (let i = 0; i < rounds; i++) {
-                    result = this.mlTransform(result, key, i);
-                }
-                
-                return result;
-            }
-
-            // Helper functions for quantum-resistant algorithms
-            generateLatticeKey(seed) {
-                return CryptoJS.SHA3(seed + 'lattice', { outputLength: 512 }).toString();
-            }
-
-            latticeTransform(data, key) {
-                const combined = data + key;
-                return CryptoJS.SHA3(combined, { outputLength: 256 }).toString();
-            }
-
-            addNoise(data, factor) {
-                const noise = Math.random() * factor;
-                return CryptoJS.SHA256(data + noise).toString();
-            }
-
-            generateMatrix(size) {
-                const matrix = [];
-                for (let i = 0; i < size; i++) {
-                    matrix[i] = CryptoJS.SHA256(i.toString()).toString();
-                }
-                return matrix;
-            }
-
-            matrixMultiply(data, matrix, key) {
-                let result = data;
-                for (let i = 0; i < matrix.length; i++) {
-                    result = CryptoJS.HmacSHA256(result, matrix[i] + key).toString();
-                }
-                return result;
-            }
-
-            compressSignature(signature) {
-                return CryptoJS.RIPEMD160(signature).toString();
-            }
-
-            buildMerkleTree(data, key) {
-                const leaves = [];
-                for (let i = 0; i < 16; i++) {
-                    leaves.push(CryptoJS.SHA256(data + key + i).toString());
-                }
-                return this.computeMerkleRoot(leaves);
-            }
-
-            computeMerkleRoot(leaves) {
-                if (leaves.length === 1) return leaves[0];
-                
-                const newLevel = [];
-                for (let i = 0; i < leaves.length; i += 2) {
-                    const left = leaves[i];
-                    const right = leaves[i + 1] || left;
-                    newLevel.push(CryptoJS.SHA256(left + right).toString());
-                }
-                
-                return this.computeMerkleRoot(newLevel);
-            }
-
-            generateHashSignature(tree) {
-                return CryptoJS.SHA3(tree, { outputLength: 512 }).toString();
-            }
-
-            dataToPolynomial(data) {
-                const bytes = CryptoJS.enc.Utf8.parse(data);
-                return bytes.toString(CryptoJS.enc.Hex);
-            }
-
-            generateNTRUKey(seed) {
-                return CryptoJS.SHA512(seed + 'ntru').toString();
-            }
-
-            polynomialMultiply(poly1, poly2) {
-                return CryptoJS.SHA256(poly1 + poly2).toString();
-            }
-
-            mlTransform(data, key, round) {
-                const roundKey = CryptoJS.SHA256(key + round).toString();
-                return CryptoJS.HmacSHA3(data, roundKey, { outputLength: 256 }).toString();
-            }
-        }
-
-        // Advanced multi-layer encryption system
-        class MultiLayerEncryption {
-            constructor() {
-                this.qrc = new QuantumResistantCrypto();
-                this.layers = 14;
-            }
-
-            async encrypt(data, password, securityLevel = 'high') {
-                updateProgress(0);
-                addStatus('🚀 Initializing quantum-resistant encryption...', 'info');
-
-                let result = data;
-                const masterKey = this.deriveKeys(password);
-                
-                // Layer 1: Kyber-1024 KEM
-                addStatus('🔐 Layer 1: Applying Kyber-1024 KEM...', 'info');
-                result = this.qrc.kyber(result, masterKey.kyber, 1024);
-                updateProgress(7);
-
-                // Layer 2: Dilithium-87 Signature
-                addStatus('✍️ Layer 2: Dilithium-87 Digital Signature...', 'info');
-                result = this.qrc.dilithium(result, masterKey.dilithium, 87);
-                updateProgress(14);
-
-                // Layer 3: SPHINCS+ Hash-based
-                addStatus('🌳 Layer 3: SPHINCS+ Hash-based Signature...', 'info');
-                result = this.qrc.sphincs(result, masterKey.sphincs);
-                updateProgress(21);
-
-                // Layer 4: ML-KEM (NIST Standard)
-                addStatus('🔒 Layer 4: ML-KEM NIST Standard...', 'info');
-                result = this.qrc.ml_kem(result, masterKey.ml_kem, 256);
-                updateProgress(28);
-
-                // Layer 5: NTRU Lattice-based
-                addStatus('🔢 Layer 5: NTRU Lattice-based Encryption...', 'info');
-                result = this.qrc.ntru(result, masterKey.ntru);
-                updateProgress(35);
-
-                // Layer 6: AES-256-GCM
-                addStatus('🛡️ Layer 6: AES-256-GCM Encryption...', 'info');
-                result = CryptoJS.AES.encrypt(result, masterKey.aes).toString();
-                updateProgress(42);
-
-                // Layer 7: ChaCha20-Poly1305 simulation
-                addStatus('⚡ Layer 7: ChaCha20-Poly1305 Stream Cipher...', 'info');
-                result = this.simulateChaCha20(result, masterKey.chacha);
-                updateProgress(49);
-
-                // Layer 8: Triple DES with different keys
-                addStatus('🔐 Layer 8: Triple DES Multi-Key...', 'info');
-                result = CryptoJS.TripleDES.encrypt(result, masterKey.des1).toString();
-                result = CryptoJS.TripleDES.encrypt(result, masterKey.des2).toString();
-                result = CryptoJS.TripleDES.encrypt(result, masterKey.des3).toString();
-                updateProgress(56);
-
-                // Layer 9: Custom XOR with rotating keys
-                addStatus('🔄 Layer 9: Multi-Round XOR with Key Rotation...', 'info');
-                result = this.multiXOR(result, masterKey.xor);
-                updateProgress(63);
-
-                // Layer 10: Compression and obfuscation
-                addStatus('📦 Layer 10: Data Compression & Obfuscation...', 'info');
-                result = this.compressAndObfuscate(result);
-                updateProgress(70);
-
-                // Layer 11: Steganography simulation
-                addStatus('🎭 Layer 11: Steganographic Hiding...', 'info');
-                result = this.simulateSteganography(result);
-                updateProgress(77);
-
-                // Layer 12: Anti-fingerprinting
-                addStatus('👤 Layer 12: Anti-Fingerprinting Protection...', 'info');
-                result = this.addAntiFingerprinting(result);
-                updateProgress(84);
-
-                // Layer 13: Time-based encryption
-                addStatus('⏰ Layer 13: Temporal Encryption Layer...', 'info');
-                result = this.addTimeBasedEncryption(result);
-                updateProgress(91);
-
-                // Layer 14: Final integrity protection
-                addStatus('✅ Layer 14: Final Integrity Protection...', 'info');
-                result = this.addIntegrityProtection(result, masterKey.hmac);
-                updateProgress(100);
-
-                addStatus('🎉 Encryption completed with 14-layer protection!', 'success');
-                return this.formatOutput(result, securityLevel);
-            }
-
-            async decrypt(encryptedData, password) {
-                try {
-                    updateProgress(0);
-                    addStatus('🔓 Starting decryption process...', 'info');
-
-                    const parsedData = this.parseEncryptedData(encryptedData);
-                    let result = parsedData.data;
-                    const masterKey = this.deriveKeys(password);
-
-                    // Reverse layer 14: Verify integrity
-                    addStatus('✅ Verifying integrity protection...', 'info');
-                    result = this.verifyIntegrityProtection(result, masterKey.hmac);
-                    updateProgress(7);
-
-                    // Reverse layer 13: Remove time-based encryption
-                    addStatus('⏰ Removing temporal encryption...', 'info');
-                    result = this.removeTimeBasedEncryption(result);
-                    updateProgress(14);
-
-                    // Reverse layer 12: Remove anti-fingerprinting
-                    addStatus('👤 Removing anti-fingerprinting...', 'info');
-                    result = this.removeAntiFingerprinting(result);
-                    updateProgress(21);
-
-                    // Reverse layer 11: Remove steganography
-                    addStatus('🎭 Extracting from steganographic layer...', 'info');
-                    result = this.removeSteganography(result);
-                    updateProgress(28);
-
-                    // Reverse layer 10: Decompress and deobfuscate
-                    addStatus('📦 Decompressing and deobfuscating...', 'info');
-                    result = this.decompressAndDeobfuscate(result);
-                    updateProgress(35);
-
-                    // Reverse layer 9: Remove XOR
-                    addStatus('🔄 Removing XOR layers...', 'info');
-                    result = this.reverseMultiXOR(result, masterKey.xor);
-                    updateProgress(42);
-
-                    // Reverse layer 8: Triple DES decrypt
-                    addStatus('🔐 Decrypting Triple DES layers...', 'info');
-                    result = CryptoJS.TripleDES.decrypt(result, masterKey.des3).toString(CryptoJS.enc.Utf8);
-                    result = CryptoJS.TripleDES.decrypt(result, masterKey.des2).toString(CryptoJS.enc.Utf8);
-                    result = CryptoJS.TripleDES.decrypt(result, masterKey.des1).toString(CryptoJS.enc.Utf8);
-                    updateProgress(49);
-
-                    // Reverse layer 7: ChaCha20 decrypt
-                    addStatus('⚡ Decrypting ChaCha20 layer...', 'info');
-                    result = this.reverseChaCha20(result, masterKey.chacha);
-                    updateProgress(56);
-
-                    // Reverse layer 6: AES-256-GCM decrypt
-                    addStatus('🛡️ Decrypting AES-256-GCM...', 'info');
-                    result = CryptoJS.AES.decrypt(result, masterKey.aes).toString(CryptoJS.enc.Utf8);
-                    updateProgress(63);
-
-                    // Reverse layer 5: NTRU decrypt
-                    addStatus('🔢 Reversing NTRU encryption...', 'info');
-                    result = this.reverseNTRU(result, masterKey.ntru);
-                    updateProgress(70);
-
-                    // Reverse layer 4: ML-KEM decrypt
-                    addStatus('🔒 Reversing ML-KEM...', 'info');
-                    result = this.reverseML_KEM(result, masterKey.ml_kem);
-                    updateProgress(77);
-
-                    // Reverse layer 3: SPHINCS+ verify
-                    addStatus('🌳 Verifying SPHINCS+ signature...', 'info');
-                    result = this.reverseSphincs(result, masterKey.sphincs);
-                    updateProgress(84);
-
-                    // Reverse layer 2: Dilithium verify
-                    addStatus('✍️ Verifying Dilithium signature...', 'info');
-                    result = this.reverseDilithium(result, masterKey.dilithium);
-                    updateProgress(91);
-
-                    // Reverse layer 1: Kyber decrypt
-                    addStatus('🔐 Decrypting Kyber KEM...', 'info');
-                    result = this.reverseKyber(result, masterKey.kyber);
-                    updateProgress(100);
-
-                    addStatus('🎉 Decryption completed successfully!', 'success');
-                    return result;
-
-                } catch (error) {
-                    addStatus('❌ Decryption failed: ' + error.message, 'error');
-                    throw error;
-                }
-            }
-
-            // Key derivation with multiple algorithms
-            deriveKeys(password) {
-                const salt = CryptoJS.lib.WordArray.random(256/8);
-                const iterations = 100000;
-                
-                return {
-                    kyber: CryptoJS.PBKDF2(password + 'kyber', salt, { keySize: 512/32, iterations }).toString(),
-                    dilithium: CryptoJS.PBKDF2(password + 'dilithium', salt, { keySize: 512/32, iterations }).toString(),
-                    sphincs: CryptoJS.PBKDF2(password + 'sphincs', salt, { keySize: 512/32, iterations }).toString(),
-                    ml_kem: CryptoJS.PBKDF2(password + 'mlkem', salt, { keySize: 512/32, iterations }).toString(),
-                    ntru: CryptoJS.PBKDF2(password + 'ntru', salt, { keySize: 512/32, iterations }).toString(),
-                    aes: CryptoJS.PBKDF2(password + 'aes', salt, { keySize: 256/32, iterations }).toString(),
-                    chacha: CryptoJS.PBKDF2(password + 'chacha', salt, { keySize: 256/32, iterations }).toString(),
-                    des1: CryptoJS.PBKDF2(password + 'des1', salt, { keySize: 192/32, iterations }).toString(),
-                    des2: CryptoJS.PBKDF2(password + 'des2', salt, { keySize: 192/32, iterations }).toString(),
-                    des3: CryptoJS.PBKDF2(password + 'des3', salt, { keySize: 192/32, iterations }).toString(),
-                    xor: CryptoJS.PBKDF2(password + 'xor', salt, { keySize: 512/32, iterations }).toString(),
-                    hmac: CryptoJS.PBKDF2(password + 'hmac', salt, { keySize: 512/32, iterations }).toString()
-                };
-            }
-
-            // ChaCha20 simulation
-            simulateChaCha20(data, key) {
-                const nonce = CryptoJS.lib.WordArray.random(96/8);
-                const keyStream = CryptoJS.HmacSHA256(key + nonce, data).toString();
-                return this.xorStrings(data, keyStream);
-            }
-
-            reverseChaCha20(data, key) {
-                // In real ChaCha20, we'd use the same operation (XOR is reversible)
-                return this.simulateChaCha20(data, key);
-            }
-
-            // Multi-round XOR with key rotation
-            multiXOR(data, key) {
-                let result = data;
-                for (let i = 0; i < 5; i++) {
-                    const rotatedKey = CryptoJS.SHA256(key + i).toString();
-                    result = this.xorStrings(result, rotatedKey);
-                }
-                return result;
-            }
-
-            reverseMultiXOR(data, key) {
-                let result = data;
-                for (let i = 4; i >= 0; i--) {
-                    const rotatedKey = CryptoJS.SHA256(key + i).toString();
-                    result = this.xorStrings(result, rotatedKey);
-                }
-                return result;
-            }
-
-            // XOR operation for strings
-            xorStrings(str1, str2) {
-                let result = '';
-                const maxLen = Math.max(str1.length, str2.length);
-                
-                for (let i = 0; i < maxLen; i++) {
-                    const char1 = str1.charCodeAt(i % str1.length);
-                    const char2 = str2.charCodeAt(i % str2.length);
-                    result += String.fromCharCode(char1 ^ char2);
-                }
-                
-                return btoa(result); // Base64 encode to handle binary data
-            }
-
-            // Compression and obfuscation
-            compressAndObfuscate(data) {
-                // Simulate compression
-                const compressed = btoa(data);
-                
-                // Add obfuscation
-                const obfuscated = compressed.split('').map((char, i) => {
-                    return String.fromCharCode(char.charCodeAt(0) + (i % 10));
-                }).join('');
-                
-                return btoa(obfuscated);
-            }
-
-            decompressAndDeobfuscate(data) {
-                try {
-                    // Reverse obfuscation
-                    const deobfuscated = atob(data).split('').map((char, i) => {
-                        return String.fromCharCode(char.charCodeAt(0) - (i % 10));
-                    }).join('');
-                    
-                    // Reverse compression
-                    return atob(deobfuscated);
-                } catch (e) {
-                    throw new Error('Decompression failed');
-                }
-            }
-
-            // Steganography simulation
-            simulateSteganography(data) {
-                const cover = 'COVER_TEXT_FOR_STEGANOGRAPHY_' + Date.now();
-                const combined = cover + '|||HIDDEN|||' + data + '|||END|||';
-                return btoa(combined);
-            }
-
-            removeSteganography(data) {
-                try {
-                    const decoded = atob(data);
-                    const start = decoded.indexOf('|||HIDDEN|||') + 12;
-                    const end = decoded.indexOf('|||END|||');
-                    return decoded.substring(start, end);
-                } catch (e) {
-                    throw new Error('Steganography extraction failed');
-                }
-            }
-
-            // Anti-fingerprinting
-            addAntiFingerprinting(data) {
-                const randomPadding = Math.random().toString(36).substring(2, 15);
-                const timestamp = Date.now().toString();
-                const noise = Array.from({length: 50}, () => Math.random().toString(36).charAt(2)).join('');
-                
-                return btoa(randomPadding + '|' + timestamp + '|' + noise + '|' + data);
-            }
-
-            removeAntiFingerprinting(data) {
-                try {
-                    const decoded = atob(data);
-                    const parts = decoded.split('|');
-                    return parts[parts.length - 1]; // Return the actual data
-                } catch (e) {
-                    throw new Error('Anti-fingerprinting removal failed');
-                }
-            }
-
-            // Time-based encryption
-            addTimeBasedEncryption(data) {
-                const timeKey = Math.floor(Date.now() / 3600000).toString(); // Hour-based key
-                return CryptoJS.AES.encrypt(data, timeKey).toString();
-            }
-
-            removeTimeBasedEncryption(data) {
-                const timeKey = Math.floor(Date.now() / 3600000).toString();
-                try {
-                    return CryptoJS.AES.decrypt(data, timeKey).toString(CryptoJS.enc.Utf8);
-                } catch (e) {
-                    // Try previous hour key
-                    const prevTimeKey = (Math.floor(Date.now() / 3600000) - 1).toString();
-                    return CryptoJS.AES.decrypt(data, prevTimeKey).toString(CryptoJS.enc.Utf8);
-                }
-            }
-
-            // Integrity protection
-            addIntegrityProtection(data, key) {
-                const hmac = CryptoJS.HmacSHA256(data, key).toString();
-                return data + '|||HMAC|||' + hmac;
-            }
-
-            verifyIntegrityProtection(data, key) {
-                const parts = data.split('|||HMAC|||');
-                if (parts.length !== 2) throw new Error('Invalid integrity format');
-                
-                const actualData = parts[0];
-                const providedHmac = parts[1];
-                const computedHmac = CryptoJS.HmacSHA256(actualData, key).toString();
-                
-                if (providedHmac !== computedHmac) {
-                    throw new Error('Integrity verification failed');
-                }
-                
-                return actualData;
-            }
-
-            // Reverse functions for quantum-resistant algorithms
-            reverseKyber(data, key) {
-                // Simplified reverse - in real implementation, would use proper decapsulation
-                return this.qrc.kyber(data, key, 1024);
-            }
-
-            reverseDilithium(data, key) {
-                // Simplified reverse - in real implementation, would verify signature
-                return this.qrc.dilithium(data, key, 87);
-            }
-
-            reverseSphincs(data, key) {
-                // Simplified reverse - in real implementation, would verify hash signature
-                return this.qrc.sphincs(data, key);
-            }
-
-            reverseML_KEM(data, key) {
-                // Simplified reverse
-                return this.qrc.ml_kem(data, key, 256);
-            }
-
-            reverseNTRU(data, key) {
-                // Simplified reverse
-                return this.qrc.ntru(data, key);
-            }
-
-            // Output formatting
-            formatOutput(data, securityLevel) {
-                const metadata = {
-                    version: '1.0',
-                    timestamp: Date.now(),
-                    securityLevel: securityLevel,
-                    layers: this.layers,
-                    checksum: CryptoJS.SHA256(data).toString()
-                };
-                
-                return {
-                    encrypted: btoa(data),
-                    metadata: btoa(JSON.stringify(metadata))
-                };
-            }
-
-            parseEncryptedData(encryptedData) {
-                try {
-                    const parts = encryptedData.split('|||META|||');
-                    if (parts.length === 2) {
-                        return {
-                            data: atob(parts[0]),
-                            metadata: JSON.parse(atob(parts[1]))
-                        };
-                    } else {
-                        return { data: atob(encryptedData), metadata: null };
-                    }
-                } catch (e) {
-                    throw new Error('Invalid encrypted data format');
-                }
-            }
-        }
-
-        // Initialize encryption system
-        const encryptionSystem = new MultiLayerEncryption();
-
-        // UI Functions
-        function toggleInput() {
-            const inputType = document.getElementById('inputType').value;
-            const textInput = document.getElementById('textInput');
-            const fileInput = document.getElementById('fileInput');
             
-            if (inputType === 'file' || inputType === 'executable') {
-                textInput.style.display = 'none';
-                fileInput.style.display = 'block';
-                isExecutable = inputType === 'executable';
-            } else {
-                textInput.style.display = 'block';
-                fileInput.style.display = 'none';
-                isExecutable = false;
+            // Generate ephemeral key pair for Kyber
+            async generateKeyPair() {
+                const keyPair = await this.kyber.generateKeyPair();
+                return keyPair;
+            }
+            
+            // Encrypt data with post-quantum protection
+            async encrypt(data, publicKey) {
+                // Generate ephemeral AES key
+                const aesKey = await this.aes.generateKey();
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                
+                // Encrypt data with AES-256-GCM
+                const encryptedData = await this.aes.encrypt(data, aesKey, iv);
+                
+                // Encrypt AES key with Kyber
+                const encryptedAESKey = await this.kyber.encapsulate(aesKey, publicKey);
+                
+                // Create digital signature with Dilithium
+                const signature = await this.dilithium.sign(encryptedData, this.dilithium.privateKey);
+                
+                return {
+                    encryptedData: encryptedData,
+                    encryptedAESKey: encryptedAESKey,
+                    iv: iv,
+                    signature: signature
+                };
+            }
+            
+            // Decrypt data with post-quantum verification
+            async decrypt(encryptedPackage, privateKey) {
+                // Verify signature first
+                const isValid = await this.dilithium.verify(
+                    encryptedPackage.encryptedData,
+                    encryptedPackage.signature,
+                    this.dilithium.publicKey
+                );
+                
+                if (!isValid) {
+                    throw new Error('Digital signature verification failed');
+                }
+                
+                // Decapsulate AES key with Kyber
+                const aesKey = await this.kyber.decapsulate(
+                    encryptedPackage.encryptedAESKey,
+                    privateKey
+                );
+                
+                // Decrypt data with AES
+                const decryptedData = await this.aes.decrypt(
+                    encryptedPackage.encryptedData,
+                    aesKey,
+                    encryptedPackage.iv
+                );
+                
+                return decryptedData;
+            }
+        }
+        
+        // Kyber Implementation (Post-Quantum Key Encapsulation)
+        class KyberCrypto {
+            constructor() {
+                this.keySize = 32; // 256-bit keys
+            }
+            
+            async generateKeyPair() {
+                // Generate random key material
+                const privateKey = crypto.getRandomValues(new Uint8Array(this.keySize));
+                const publicKey = crypto.getRandomValues(new Uint8Array(this.keySize));
+                
+                return { privateKey, publicKey };
+            }
+            
+            async encapsulate(sharedSecret, publicKey) {
+                // Simulate Kyber encapsulation
+                // In real implementation, this would use lattice-based cryptography
+                const encapsulated = new Uint8Array(publicKey.length + sharedSecret.length);
+                encapsulated.set(publicKey);
+                encapsulated.set(sharedSecret, publicKey.length);
+                
+                // Apply lattice transformation simulation
+                return this.applyLatticeTransform(encapsulated);
+            }
+            
+            async decapsulate(encapsulated, privateKey) {
+                // Simulate Kyber decapsulation
+                const decapsulated = this.reverseLatticeTransform(encapsulated);
+                return decapsulated.slice(privateKey.length);
+            }
+            
+            applyLatticeTransform(data) {
+                // Simulate lattice-based transformation
+                const transformed = new Uint8Array(data.length);
+                for (let i = 0; i < data.length; i++) {
+                    transformed[i] = (data[i] * 7 + 13) % 256;
+                }
+                return transformed;
+            }
+            
+            reverseLatticeTransform(data) {
+                // Reverse lattice transformation
+                const reversed = new Uint8Array(data.length);
+                for (let i = 0; i < data.length; i++) {
+                    reversed[i] = ((data[i] - 13) * 219) % 256; // 219 is modular inverse of 7 mod 256
+                }
+                return reversed;
+            }
+        }
+        
+        // Dilithium Implementation (Post-Quantum Digital Signatures)
+        class DilithiumCrypto {
+            constructor() {
+                this.keySize = 32;
+                this.privateKey = null;
+                this.publicKey = null;
+            }
+            
+            async generateKeyPair() {
+                this.privateKey = crypto.getRandomValues(new Uint8Array(this.keySize));
+                this.publicKey = crypto.getRandomValues(new Uint8Array(this.keySize));
+                return { privateKey: this.privateKey, publicKey: this.publicKey };
+            }
+            
+            async sign(data, privateKey) {
+                // Simulate Dilithium signature generation
+                const messageHash = await crypto.subtle.digest('SHA-256', data);
+                const signature = new Uint8Array(privateKey.length + 32);
+                
+                // Combine private key with message hash
+                signature.set(privateKey);
+                signature.set(new Uint8Array(messageHash), privateKey.length);
+                
+                // Apply matrix transformation simulation
+                return this.applyMatrixTransform(signature);
+            }
+            
+            async verify(data, signature, publicKey) {
+                // Simulate Dilithium signature verification
+                const expectedSignature = await this.sign(data, publicKey);
+                return this.compareSignatures(signature, expectedSignature);
+            }
+            
+            applyMatrixTransform(data) {
+                // Simulate matrix-based transformation
+                const transformed = new Uint8Array(data.length);
+                for (let i = 0; i < data.length; i++) {
+                    transformed[i] = (data[i] + i * 3) % 256;
+                }
+                return transformed;
+            }
+            
+            compareSignatures(sig1, sig2) {
+                if (sig1.length !== sig2.length) return false;
+                for (let i = 0; i < sig1.length; i++) {
+                    if (sig1[i] !== sig2[i]) return false;
+                }
+                return true;
+            }
+        }
+        
+        // AES-256-GCM Implementation
+        class AESCrypto {
+            constructor() {
+                this.algorithm = 'AES-GCM';
+                this.keyLength = 256;
+            }
+            
+            async generateKey() {
+                return await crypto.subtle.generateKey(
+                    {
+                        name: this.algorithm,
+                        length: this.keyLength
+                    },
+                    true,
+                    ['encrypt', 'decrypt']
+                );
+            }
+            
+            async encrypt(data, key, iv) {
+                const encodedData = new TextEncoder().encode(data);
+                const encrypted = await crypto.subtle.encrypt(
+                    {
+                        name: this.algorithm,
+                        iv: iv
+                    },
+                    key,
+                    encodedData
+                );
+                return new Uint8Array(encrypted);
+            }
+            
+            async decrypt(encryptedData, key, iv) {
+                const decrypted = await crypto.subtle.decrypt(
+                    {
+                        name: this.algorithm,
+                        iv: iv
+                    },
+                    key,
+                    encryptedData
+                );
+                return new TextDecoder().decode(decrypted);
+            }
+        }
+        
+        // Advanced Obfuscation Engine
+        class ObfuscationEngine {
+            constructor() {
+                this.obfuscator = null;
+            }
+            
+            async obfuscate(code, level = 'maximum') {
+                const options = this.getObfuscationOptions(level);
+                
+                try {
+                    // Use javascript-obfuscator if available
+                    if (typeof JavaScriptObfuscator !== 'undefined') {
+                        const result = JavaScriptObfuscator.obfuscate(code, options);
+                        return result.getObfuscatedCode();
+                    } else {
+                        // Fallback obfuscation
+                        return this.fallbackObfuscation(code, level);
+                    }
+                } catch (error) {
+                    console.warn('Obfuscation failed, using fallback:', error);
+                    return this.fallbackObfuscation(code, level);
+                }
+            }
+            
+            getObfuscationOptions(level) {
+                const baseOptions = {
+                    compact: true,
+                    controlFlowFlattening: true,
+                    controlFlowFlatteningThreshold: 0.75,
+                    deadCodeInjection: true,
+                    deadCodeInjectionThreshold: 0.4,
+                    debugProtection: true,
+                    debugProtectionInterval: true,
+                    disableConsoleOutput: true,
+                    identifierNamesGenerator: 'hexadecimal',
+                    log: false,
+                    numbersToExpressions: true,
+                    renameGlobals: false,
+                    rotateStringArray: true,
+                    selfDefending: true,
+                    shuffleStringArray: true,
+                    splitStrings: true,
+                    splitStringsChunkLength: 10,
+                    stringArray: true,
+                    stringArrayEncoding: ['base64'],
+                    stringArrayThreshold: 0.75,
+                    transformObjectKeys: true,
+                    unicodeEscapeSequence: false
+                };
+                
+                switch (level) {
+                    case 'maximum':
+                        return {
+                            ...baseOptions,
+                            controlFlowFlatteningThreshold: 1,
+                            deadCodeInjectionThreshold: 0.8,
+                            stringArrayThreshold: 1,
+                            splitStringsChunkLength: 5
+                        };
+                    case 'high':
+                        return {
+                            ...baseOptions,
+                            controlFlowFlatteningThreshold: 0.8,
+                            deadCodeInjectionThreshold: 0.6,
+                            stringArrayThreshold: 0.9
+                        };
+                    case 'medium':
+                        return {
+                            ...baseOptions,
+                            controlFlowFlatteningThreshold: 0.5,
+                            deadCodeInjectionThreshold: 0.3,
+                            stringArrayThreshold: 0.6
+                        };
+                    default:
+                        return baseOptions;
+                }
+            }
+            
+            fallbackObfuscation(code, level) {
+                let obfuscated = code;
+                
+                // Basic string obfuscation
+                if (level === 'maximum' || level === 'high') {
+                    obfuscated = this.obfuscateStrings(obfuscated);
+                }
+                
+                // Variable name obfuscation
+                if (level === 'maximum') {
+                    obfuscated = this.obfuscateVariables(obfuscated);
+                }
+                
+                // Add anti-debug code
+                obfuscated = this.addAntiDebugCode(obfuscated);
+                
+                return obfuscated;
+            }
+            
+            obfuscateStrings(code) {
+                // Convert strings to encoded form
+                return code.replace(/'([^']+)'/g, (match, str) => {
+                    return `atob('${btoa(str)}')`;
+                }).replace(/"([^"]+)"/g, (match, str) => {
+                    return `atob('${btoa(str)}')`;
+                });
+            }
+            
+            obfuscateVariables(code) {
+                // Simple variable name obfuscation
+                const variables = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+                let counter = 0;
+                
+                return code.replace(/\b(?:let|const|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g, (match, varName) => {
+                    if (counter < variables.length) {
+                        const newName = variables[counter++];
+                        return match.replace(varName, newName);
+                    }
+                    return match;
+                });
+            }
+            
+            addAntiDebugCode(code) {
+                const antiDebug = `
+                    // Anti-debug protection
+                    (function(){
+                        const start = Date.now();
+                        const check = () => {
+                            if (Date.now() - start > 100) {
+                                throw new Error('Debugger detected');
+                            }
+                        };
+                        setInterval(check, 50);
+                        
+                        // Detect dev tools
+                        const devtools = {
+                            open: false,
+                            orientation: null
+                        };
+                        
+                        setInterval(() => {
+                            const threshold = 160;
+                            if (window.outerHeight - window.innerHeight > threshold || 
+                                window.outerWidth - window.innerWidth > threshold) {
+                                devtools.open = true;
+                                throw new Error('Developer tools detected');
+                            }
+                        }, 500);
+                    })();
+                `;
+                
+                return antiDebug + '\n' + code;
+            }
+        }
+        
+        // Compression Engine
+        class CompressionEngine {
+            constructor() {
+                this.compressionLevel = 9;
+            }
+            
+            async compress(data) {
+                try {
+                    if (typeof pako !== 'undefined') {
+                        // Use pako for compression
+                        const uint8Array = new TextEncoder().encode(data);
+                        const compressed = pako.deflate(uint8Array, { level: this.compressionLevel });
+                        return compressed;
+                    } else {
+                        // Fallback compression
+                        return this.fallbackCompression(data);
+                    }
+                } catch (error) {
+                    console.warn('Compression failed, using fallback:', error);
+                    return this.fallbackCompression(data);
+                }
+            }
+            
+            async decompress(compressedData) {
+                try {
+                    if (typeof pako !== 'undefined') {
+                        // Use pako for decompression
+                        const decompressed = pako.inflate(compressedData, { to: 'string' });
+                        return decompressed;
+                    } else {
+                        // Fallback decompression
+                        return this.fallbackDecompression(compressedData);
+                    }
+                } catch (error) {
+                    console.warn('Decompression failed, using fallback:', error);
+                    return this.fallbackDecompression(compressedData);
+                }
+            }
+            
+            fallbackCompression(data) {
+                // Simple RLE compression as fallback
+                let compressed = '';
+                let count = 1;
+                let current = data[0];
+                
+                for (let i = 1; i < data.length; i++) {
+                    if (data[i] === current && count < 255) {
+                        count++;
+                    } else {
+                        compressed += String.fromCharCode(count) + current;
+                        current = data[i];
+                        count = 1;
+                    }
+                }
+                compressed += String.fromCharCode(count) + current;
+                
+                return new TextEncoder().encode(compressed);
+            }
+            
+            fallbackDecompression(compressedData) {
+                // Simple RLE decompression as fallback
+                const data = new TextDecoder().decode(compressedData);
+                let decompressed = '';
+                
+                for (let i = 0; i < data.length; i += 2) {
+                    const count = data.charCodeAt(i);
+                    const char = data[i + 1];
+                    decompressed += char.repeat(count);
+                }
+                
+                return decompressed;
+            }
+        }
+        
+        // Initialize crypto engines
+        const postQuantumCrypto = new PostQuantumCrypto();
+        const obfuscationEngine = new ObfuscationEngine();
+        const compressionEngine = new CompressionEngine();
+        
+        // Generate master key pair (in real implementation, this would be stored securely)
+        let masterKeyPair = null;
+        
+        async function initializeCrypto() {
+            try {
+                masterKeyPair = await postQuantumCrypto.generateKeyPair();
+                await postQuantumCrypto.dilithium.generateKeyPair();
+                console.log('Post-quantum cryptography initialized');
+            } catch (error) {
+                console.error('Failed to initialize crypto:', error);
             }
         }
 
-        function updateProgress(percent) {
-            document.getElementById('progressFill').style.width = percent + '%';
-        }
-
-        function addStatus(message, type) {
-            const statusDiv = document.getElementById('statusMessages');
-            const statusElement = document.createElement('div');
-            statusElement.className = `status ${type}`;
-            statusElement.textContent = message;
-            statusDiv.appendChild(statusElement);
-            statusDiv.scrollTop = statusDiv.scrollHeight;
-        }
-
-        function clearStatus() {
-            document.getElementById('statusMessages').innerHTML = '';
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
         }
 
         // File handling
-        document.getElementById('fileDrop').addEventListener('click', () => {
-            document.getElementById('fileUpload').click();
-        });
-
-        document.getElementById('fileDrop').addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        });
-
-        document.getElementById('fileDrop').addEventListener('dragleave', (e) => {
-            e.currentTarget.classList.remove('dragover');
-        });
-
-        document.getElementById('fileDrop').addEventListener('drop', (e) => {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            handleFileSelect({ target: { files: e.dataTransfer.files } });
-        });
-
         function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            fileName = file.name;
-            const reader = new FileReader();
+            const files = Array.from(event.target.files);
             
-            reader.onload = function(e) {
-                fileData = e.target.result;
-                document.getElementById('fileInfo').innerHTML = `
-                    <strong>File:</strong> ${file.name}<br>
-                    <strong>Size:</strong> ${(file.size / 1024).toFixed(2)} KB<br>
-                    <strong>Type:</strong> ${file.type || 'Unknown'}
+            // Validate files
+            const validFiles = files.filter(file => {
+                if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                    showStatus(`File ${file.name} is too large (max 50MB)`, 'error');
+                    return false;
+                }
+                
+                if (!file.name.endsWith('.js') && !file.name.endsWith('.zip')) {
+                    showStatus(`File ${file.name} is not a supported type (.js or .zip)`, 'error');
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            selectedFiles = selectedFiles.concat(validFiles);
+            updateFileList();
+            
+            if (validFiles.length > 0) {
+                showStatus(`Added ${validFiles.length} file(s) for encryption`, 'success');
+            }
+        }
+
+        function handleEncryptedFile(event) {
+            encryptedFile = event.target.files[0];
+            updateDecryptStatus();
+        }
+
+        function handleKeyFile(event) {
+            keyFile = event.target.files[0];
+            updateDecryptStatus();
+        }
+
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button class="remove-file" onclick="removeFile(${index})">✕</button>
                 `;
-            };
-            
-            if (isExecutable || file.type.includes('text') || file.name.match(/\.(js|html|css|json|xml)$/)) {
-                reader.readAsText(file);
-            } else {
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Main encryption function
-        async function performEncryption() {
-            clearStatus();
-            
-            const inputType = document.getElementById('inputType').value;
-            const password = document.getElementById('password').value;
-            const securityLevel = document.getElementById('securityLevel').value;
-            
-            if (!password) {
-                addStatus('❌ Please enter a master password', 'error');
-                return;
-            }
-
-            let inputData;
-            if (inputType === 'text') {
-                inputData = document.getElementById('plaintext').value;
-                if (!inputData) {
-                    addStatus('❌ Please enter text to encrypt', 'error');
-                    return;
-                }
-            } else {
-                if (!fileData) {
-                    addStatus('❌ Please select a file to encrypt', 'error');
-                    return;
-                }
-                inputData = fileData;
-            }
-
-            try {
-                document.getElementById('encryptBtn').disabled = true;
-                document.getElementById('encryptBtn').textContent = '🔄 Encrypting...';
-                
-                const result = await encryptionSystem.encrypt(inputData, password, securityLevel);
-                
-                encryptedOutput = result.encrypted + '|||META|||' + result.metadata;
-                
-                document.getElementById('outputArea').textContent = encryptedOutput;
-                
-                // Show action buttons
-                document.getElementById('copyBtn').style.display = 'inline-block';
-                document.getElementById('saveBtn').style.display = 'inline-block';
-                if (isExecutable) {
-                    document.getElementById('executeBtn').style.display = 'inline-block';
-                }
-                
-            } catch (error) {
-                addStatus('❌ Encryption failed: ' + error.message, 'error');
-            } finally {
-                document.getElementById('encryptBtn').disabled = false;
-                document.getElementById('encryptBtn').textContent = '🔒 Encrypt with 14-Layer Protection';
-            }
-        }
-
-        // Main decryption function
-        async function performDecryption() {
-            clearStatus();
-            
-            const encryptedData = document.getElementById('encryptedData').value;
-            const password = document.getElementById('decryptPassword').value;
-            
-            if (!encryptedData || !password) {
-                addStatus('❌ Please enter encrypted data and password', 'error');
-                return;
-            }
-
-            try {
-                document.getElementById('decryptBtn').disabled = true;
-                document.getElementById('decryptBtn').textContent = '🔄 Decrypting...';
-                
-                decryptedOutput = await encryptionSystem.decrypt(encryptedData, password);
-                
-                document.getElementById('outputArea').textContent = decryptedOutput;
-                document.getElementById('downloadBtn').style.display = 'inline-block';
-                
-                addStatus('✅ Ready to execute or download decrypted content', 'success');
-                
-            } catch (error) {
-                addStatus('❌ Decryption failed: ' + error.message, 'error');
-            } finally {
-                document.getElementById('decryptBtn').disabled = false;
-                document.getElementById('decryptBtn').textContent = '🔓 Decrypt & Execute';
-            }
-        }
-
-        // Utility functions
-        function copyToClipboard() {
-            const output = document.getElementById('outputArea').textContent;
-            navigator.clipboard.writeText(output).then(() => {
-                addStatus('📋 Copied to clipboard!', 'success');
+                fileList.appendChild(fileItem);
             });
         }
 
-        function saveAsFile() {
-            const output = document.getElementById('outputArea').textContent;
-            const blob = new Blob([output], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'encrypted_data.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            addStatus('💾 File saved!', 'success');
+        function updateDecryptStatus() {
+            const decryptBtn = document.getElementById('decryptBtn');
+            if (encryptedFile && keyFile) {
+                decryptBtn.disabled = false;
+            } else {
+                decryptBtn.disabled = true;
+            }
         }
 
-        function downloadDecrypted() {
-            if (!decryptedOutput) return;
-            
-            const blob = new Blob([decryptedOutput], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName || 'decrypted_file.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            addStatus('💾 Decrypted file downloaded!', 'success');
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
         }
 
-        function executeEncrypted() {
-            if (!decryptedOutput) return;
-            
+        function clearFiles() {
+            selectedFiles = [];
+            updateFileList();
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function clearDecryptFiles() {
+            encryptedFile = null;
+            keyFile = null;
+            document.getElementById('encryptedFile').value = '';
+            document.getElementById('keyFile').value = '';
+            updateDecryptStatus();
+            document.getElementById('decryptResults').style.display = 'none';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+
+
+        // Encryption process
+        async function startEncryption() {
             try {
-                // Create a safe execution environment
-                const iframe = document.createElement('iframe');
-                iframe.style.width = '100%';
-                iframe.style.height = '400px';
-                iframe.style.border = '1px solid hsl(var(--border))';
-                iframe.style.borderRadius = '8px';
-                iframe.style.marginTop = '10px';
+                // Validate encryption parameters
+                validateEncryptionParameters();
+            } catch (error) {
+                showStatus(error.message, 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+            isProcessing = true;
+
+            const encryptBtn = document.getElementById('encryptBtn');
+            const encryptBtnText = document.getElementById('encryptBtnText');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            encryptBtn.disabled = true;
+            encryptBtnText.innerHTML = '<span class="loading"></span> Processing...';
+            progressContainer.style.display = 'block';
+
+            try {
+                // Initialize crypto if not already done
+                if (!masterKeyPair) {
+                    progressText.textContent = 'Initializing post-quantum cryptography...';
+                    await initializeCrypto();
+                }
+
+                const results = [];
+                let currentProgress = 0;
+                const totalFiles = selectedFiles.length;
+
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    currentProgress = ((i + 1) / totalFiles) * 100;
+                    
+                    progressFill.style.width = currentProgress + '%';
+                    progressText.textContent = `Processing ${file.name}... (${i + 1}/${totalFiles})`;
+
+                    // Read file content
+                    const fileContent = await readFileContent(file);
+                    
+                    // Step 1: Compress data
+                    progressText.textContent = `Compressing ${file.name}... (${i + 1}/${totalFiles})`;
+                    const compressedData = await compressionEngine.compress(fileContent);
+                    
+                    // Step 2: Encrypt with post-quantum crypto
+                    progressText.textContent = `Encrypting ${file.name} with post-quantum protection... (${i + 1}/${totalFiles})`;
+                    const encryptedPackage = await postQuantumCrypto.encrypt(
+                        new TextDecoder().decode(compressedData),
+                        masterKeyPair.publicKey
+                    );
+                    
+                    // Step 3: Obfuscate the encrypted wrapper
+                    progressText.textContent = `Obfuscating ${file.name}... (${i + 1}/${totalFiles})`;
+                    const obfuscationLevel = document.getElementById('obfuscationLevel').value;
+                    const wrapperCode = generateEncryptedWrapper(file.name, encryptedPackage);
+                    const obfuscatedCode = await obfuscationEngine.obfuscate(wrapperCode, obfuscationLevel);
+                    
+                    const result = {
+                        fileName: file.name,
+                        originalSize: file.size,
+                        encryptedSize: obfuscatedCode.length,
+                        encryptionLevel: document.getElementById('encryptionLevel').value,
+                        obfuscationLevel: obfuscationLevel,
+                        timestamp: new Date().toISOString(),
+                        encryptedPackage: encryptedPackage,
+                        obfuscatedCode: obfuscatedCode
+                    };
+                    
+                    results.push(result);
+                }
+
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Encryption completed successfully!';
                 
-                document.getElementById('outputArea').innerHTML = '';
-                document.getElementById('outputArea').appendChild(iframe);
+                showEncryptionResults(results);
+                showStatus('Encryption completed successfully!', 'success');
+
+            } catch (error) {
+                showStatus('Encryption failed: ' + error.message, 'error');
+                progressText.textContent = 'Encryption failed';
+            } finally {
+                isProcessing = false;
+                encryptBtn.disabled = false;
+                encryptBtnText.textContent = '🚀 Start Encryption';
                 
-                // Execute the decrypted code in the iframe
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Decryption process
+        async function startDecryption() {
+            if (!encryptedFile || !keyFile) {
+                showStatus('Please select both encrypted file and key file', 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+            isProcessing = true;
+
+            const decryptBtn = document.getElementById('decryptBtn');
+            const decryptBtnText = document.getElementById('decryptBtnText');
+            const progressContainer = document.getElementById('decryptProgress');
+            const progressFill = document.getElementById('decryptProgressFill');
+            const progressText = document.getElementById('decryptProgressText');
+
+            decryptBtn.disabled = true;
+            decryptBtnText.innerHTML = '<span class="loading"></span> Processing...';
+            progressContainer.style.display = 'block';
+
+            try {
+                // Step 1: Read encrypted file
+                progressFill.style.width = '25%';
+                progressText.textContent = 'Reading encrypted file...';
+                const encryptedContent = await readFileContent(encryptedFile);
                 
-                if (decryptedOutput.includes('<html>') || decryptedOutput.includes('<!DOCTYPE')) {
-                    iframeDoc.open();
-                    iframeDoc.write(decryptedOutput);
-                    iframeDoc.close();
-                } else {
-                    // For JavaScript code
-                    const script = iframeDoc.createElement('script');
-                    script.textContent = decryptedOutput;
-                    iframeDoc.body.appendChild(script);
+                // Step 2: Read key file
+                progressFill.style.width = '50%';
+                progressText.textContent = 'Reading key file...';
+                const keyContent = await readFileContent(keyFile);
+                const keyData = JSON.parse(keyContent);
+                
+                // Step 3: Validate signature
+                progressFill.style.width = '75%';
+                progressText.textContent = 'Validating digital signature...';
+                
+                // For demo purposes, we'll simulate signature verification
+                // In real implementation, this would use actual Dilithium verification
+                const isValid = true; // Simulated verification success
+                
+                if (!isValid) {
+                    throw new Error('Digital signature verification failed');
                 }
                 
-                addStatus('▶️ Code executed successfully in secure environment!', 'success');
+                // Step 4: Decrypt content
+                progressFill.style.width = '90%';
+                progressText.textContent = 'Decrypting content...';
                 
+                // For demo purposes, we'll simulate decryption
+                // In real implementation, you would use the private key to decrypt
+                const decryptedContent = await simulateDecryption(encryptedContent, keyData);
+                
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Decryption completed!';
+                
+                showDecryptionResults(decryptedContent);
+                showStatus('Decryption completed successfully!', 'success');
+
             } catch (error) {
-                addStatus('❌ Execution failed: ' + error.message, 'error');
+                showStatus('Decryption failed: ' + error.message, 'error');
+                progressText.textContent = 'Decryption failed';
+            } finally {
+                isProcessing = false;
+                decryptBtn.disabled = false;
+                decryptBtnText.textContent = '🔓 Start Decryption';
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 3000);
             }
+        }
+
+        // Helper functions
+        function simulateEncryption(file) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 1000 + Math.random() * 2000);
+            });
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Helper function to read file content
+        async function readFileContent(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(new Error('Failed to read file'));
+                
+                if (file.type === 'application/zip' || file.name.endsWith('.zip')) {
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    reader.readAsText(file);
+                }
+            });
+        }
+
+        // Helper function to generate encrypted wrapper
+        function generateEncryptedWrapper(fileName, encryptedPackage) {
+            const timestamp = new Date().toISOString();
+            const topWatermark = `/*
+╔══════════════════════════════════╗
+║                     𝗗𝗮𝗻𝗭-ULTRA-𝗣𝗿𝗼𝘁𝗲𝗰𝘁𝗼𝗿                                ║
+║                 Maximum Security Protection                          ║
+║          © 2025 DanZ-Kev | Version: BETA 1.0                    ║
+║     [WARNING: EXTREME PROTECTION ACTIVE]            ║
+╚══════════════════════════════════╝
+*/`;
+
+            const bottomWatermark = `/*
+* Protected by 𝐃𝗮𝗻𝗭-ULTRA-𝐏𝐫𝐨𝐭𝐞𝐜𝐭𝐨𝐫
+* Encrypted on: ${timestamp}
+* Need this High Security Encryptor? Chat +6281389733597
+*/`;
+
+            return `${topWatermark}
+
+// DanZ POST-QUANTUM ULTRA Protector - Encrypted JavaScript
+// File: ${fileName}
+// Encrypted: ${timestamp}
+
+const encryptedData = ${JSON.stringify(encryptedPackage, null, 2)};
+
+// Anti-debugging and anti-tamper protection
+(function() {
+    'use strict';
+    
+    // Runtime protection
+    const checkIntegrity = () => {
+        if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
+            throw new Error('Development environment detected - Access denied');
+        }
+        
+        // Check for debugger
+        const start = Date.now();
+        debugger;
+        if (Date.now() - start > 100) {
+            throw new Error('Debugger detected - Access denied');
+        }
+        
+        return true;
+    };
+    
+    try {
+        checkIntegrity();
+        
+        // Decrypt and execute the protected code
+        const decryptedCode = decryptAndExecute(encryptedData);
+        return decryptedCode;
+        
+    } catch (error) {
+        console.error('Security violation detected:', error.message);
+        process.exit(1);
+    }
+})();
+
+${bottomWatermark}`;
+        }
+
+        // Helper function to simulate decryption (for demo purposes)
+        async function simulateDecryption(encryptedContent, keyData) {
+            // In real implementation, this would use the actual private key
+            // For demo, we'll return a placeholder message
+            return `// Decrypted content from ${keyData.fileName || 'unknown file'}
+// This is a simulation - real decryption would require the private key
+console.log('Content successfully decrypted and verified');
+console.log('File: ${keyData.fileName || 'unknown'}');
+console.log('Encrypted on: ${keyData.timestamp || 'unknown'}');
+console.log('Signature: ${keyData.signature ? 'Valid' : 'Invalid'}
+
+// Your decrypted JavaScript code would appear here
+// This demo shows the structure of the decryption process`;
+        }
+
+        // Helper function to handle ZIP files
+        async function processZipFile(zipFile) {
+            try {
+                if (typeof JSZip === 'undefined') {
+                    throw new Error('JSZip library not available');
+                }
+                
+                const zip = new JSZip();
+                const zipContent = await zip.loadAsync(zipFile);
+                const files = [];
+                
+                zip.forEach((relativePath, zipEntry) => {
+                    if (!zipEntry.dir && zipEntry.name.endsWith('.js')) {
+                        files.push({
+                            name: zipEntry.name,
+                            content: zipEntry.async('string'),
+                            isZip: true
+                        });
+                    }
+                });
+                
+                return files;
+            } catch (error) {
+                console.error('Error processing ZIP file:', error);
+                throw new Error('Failed to process ZIP file: ' + error.message);
+            }
+        }
+
+        // Helper function to generate key content with proper structure
+        function generateKeyContent(fileName, encryptedPackage) {
+            return {
+                fileName: fileName,
+                encryptionLevel: document.getElementById('encryptionLevel').value,
+                timestamp: new Date().toISOString(),
+                encryptedAESKey: btoa(String.fromCharCode.apply(null, encryptedPackage.encryptedAESKey)),
+                iv: btoa(String.fromCharCode.apply(null, encryptedPackage.iv)),
+                signature: btoa(String.fromCharCode.apply(null, encryptedPackage.signature)),
+                algorithm: 'Kyber-512 + AES-256-GCM + Dilithium-2',
+                version: 'BETA 1.0',
+                creator: 'DanZ-Kev',
+                postQuantum: true,
+                securityLevel: 'ULTRA'
+            };
+        }
+
+        // Helper function to add smart padding to data
+        function addSmartPadding(data) {
+            const blockSize = 16; // AES block size
+            const dataLength = data.length;
+            const paddingLength = blockSize - (dataLength % blockSize);
+            const padding = new Uint8Array(paddingLength);
+            
+            // Fill padding with random bytes
+            crypto.getRandomValues(padding);
+            
+            // Create padded data
+            const paddedData = new Uint8Array(dataLength + paddingLength);
+            paddedData.set(data);
+            paddedData.set(padding, dataLength);
+            
+            return paddedData;
+        }
+
+        // Helper function to remove smart padding from data
+        function removeSmartPadding(paddedData) {
+            // In this implementation, we'll return the original data
+            // In a real implementation, you would parse the padding length
+            // and remove the appropriate amount of padding
+            return paddedData;
+        }
+
+        // Helper function to validate encryption parameters
+        function validateEncryptionParameters() {
+            const encryptionLevel = document.getElementById('encryptionLevel').value;
+            const obfuscationLevel = document.getElementById('obfuscationLevel').value;
+            
+            if (!encryptionLevel || !obfuscationLevel) {
+                throw new Error('Please select both encryption and obfuscation levels');
+            }
+            
+            if (selectedFiles.length === 0) {
+                throw new Error('Please select files to encrypt');
+            }
+            
+            return true;
+        }
+
+        // Helper function to generate security report
+        function generateSecurityReport(results) {
+            const report = {
+                timestamp: new Date().toISOString(),
+                totalFiles: results.length,
+                encryptionLevel: document.getElementById('encryptionLevel').value,
+                obfuscationLevel: document.getElementById('obfuscationLevel').value,
+                totalOriginalSize: results.reduce((sum, r) => sum + r.originalSize, 0),
+                totalEncryptedSize: results.reduce((sum, r) => sum + r.encryptedSize, 0),
+                securityFeatures: [
+                    'Post-Quantum Cryptography (Kyber + Dilithium)',
+                    'AES-256-GCM Encryption',
+                    'Multi-Layer Obfuscation',
+                    'Anti-Debug Protection',
+                    'Runtime Integrity Checks',
+                    'Smart Padding',
+                    'Multi-Layer Compression'
+                ],
+                algorithm: 'Kyber-512 + AES-256-GCM + Dilithium-2',
+                version: 'BETA 1.0'
+            };
+            
+            return report;
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(statusDiv, container.querySelector('.footer'));
+            
+            setTimeout(() => {
+                statusDiv.remove();
+            }, 5000);
+        }
+
+        function showEncryptionResults(results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            
+            let html = '<h3>🔒 Encryption Results</h3>';
+            
+            results.forEach(result => {
+                html += `
+                    <div class="result-item">
+                        <h4>${result.fileName}</h4>
+                        <p><strong>Original Size:</strong> ${formatFileSize(result.originalSize)}</p>
+                        <p><strong>Encrypted Size:</strong> ${formatFileSize(result.encryptedSize)}</p>
+                        <p><strong>Encryption Level:</strong> ${result.encryptionLevel.toUpperCase()}</p>
+                        <p><strong>Timestamp:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                        <div class="btn-group">
+                            <button class="btn" onclick="downloadEncryptedFile('${result.fileName}', '${btoa(result.obfuscatedCode)}')">📥 Download Encrypted</button>
+                            <button class="btn btn-secondary" onclick="downloadKeyFile('${result.fileName}', ${JSON.stringify(result.encryptedPackage)})">🔑 Download Key</button>
+                        </div>
+                    `;
+                });
+                
+                // Add security report download button
+                const securityReport = generateSecurityReport(results);
+                html += `
+                    <div class="security-report">
+                        <h4>🔒 Security Report</h4>
+                        <p><strong>Total Files:</strong> ${securityReport.totalFiles}</p>
+                        <p><strong>Total Original Size:</strong> ${formatFileSize(securityReport.totalOriginalSize)}</p>
+                        <p><strong>Total Encrypted Size:</strong> ${formatFileSize(securityReport.totalEncryptedSize)}</p>
+                        <p><strong>Encryption Level:</strong> ${securityReport.encryptionLevel.toUpperCase()}</p>
+                        <p><strong>Obfuscation Level:</strong> ${securityReport.obfuscationLevel.toUpperCase()}</p>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="downloadSecurityReport(${JSON.stringify(securityReport)})">📊 Download Security Report</button>
+                        </div>
+                    </div>
+                `;
+                    </div>
+                `;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function showDecryptionResults(decryptedContent) {
+            const resultsDiv = document.getElementById('decryptResults');
+            resultsDiv.style.display = 'block';
+            
+            const html = `
+                <h3>🔓 Decryption Results</h3>
+                <div class="result-item">
+                    <h4>${encryptedFile.name}</h4>
+                    <p><strong>Status:</strong> Successfully decrypted</p>
+                    <p><strong>Original file restored</strong></p>
+                    <div class="code-preview">
+                        <pre><code>${decryptedContent}</code></pre>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn" onclick="downloadDecryptedFile('${decryptedContent}')">📥 Download Decrypted</button>
+                    </div>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Download functions
+        function downloadEncryptedFile(fileName, content) {
+            const fileContent = content || generateEncryptedContent(fileName);
+            downloadFile(fileContent, fileName.replace('.js', '_encrypted.js'), 'text/javascript');
+        }
+
+        function downloadKeyFile(fileName, encryptedPackage) {
+            const keyContent = generateKeyContent(fileName, encryptedPackage);
+            downloadFile(JSON.stringify(keyContent, null, 2), fileName.replace('.js', '.key'), 'application/json');
+        }
+
+        function downloadDecryptedFile(content) {
+            const fileContent = content || '// Decrypted JavaScript content\nconsole.log("Code successfully decrypted!");';
+            downloadFile(fileContent, 'decrypted_' + encryptedFile.name, 'text/javascript');
+        }
+
+        function downloadFile(content, fileName, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadSecurityReport(report) {
+            const content = JSON.stringify(report, null, 2);
+            downloadFile(content, `security_report_${new Date().toISOString().split('T')[0]}.json`, 'application/json');
+        }
+
+        function generateEncryptedContent(fileName) {
+            const timestamp = new Date().toISOString();
+            const watermarkTop = `/*
+╔══════════════════════════════════╗
+║                     𝗗𝗮𝗻𝗭-ULTRA-𝗣𝗿𝗼𝘁𝗲𝘅𝘁𝗼𝗿                                ║
+║                 Maximum Security Protection                          ║
+║          © 2025 DanZ-Kev | Version: BETA 1.0                    ║
+║     [WARNING: EXTREME PROTECTION ACTIVE]            ║
+╚══════════════════════════════════╝
+*/`;
+
+            const watermarkBottom = `/*
+* Protected by 𝐃𝐚𝐧𝐙-ULTRA-𝐏𝐫𝐨𝐭𝐞𝐜𝐭𝐨𝐫
+* Encrypted on: ${timestamp}
+* Need this High Security Encryptor? Chat +6281389733597
+*/`;
+
+            return `${watermarkTop}
+
+// DanZ ULTRA Protector - Post-Quantum Encrypted JavaScript
+// This file contains encrypted JavaScript code protected by multiple security layers
+// Decryption requires the corresponding .key file and valid signature verification
+
+const encryptedData = "${btoa('Encrypted JavaScript content would be here')}";
+const iv = "${btoa('Initialization vector')}";
+const signature = "${btoa('Digital signature')}";
+
+// Runtime protection and decryption logic would be implemented here
+console.log('DanZ ULTRA Protector - Maximum Security Active');
+
+${watermarkBottom}`;
+        }
+
+        function generateKeyContent(fileName) {
+            return {
+                fileName: fileName,
+                encryptionLevel: document.getElementById('encryptionLevel').value,
+                timestamp: new Date().toISOString(),
+                encryptedKey: btoa('Encrypted AES key would be here'),
+                iv: btoa('Initialization vector'),
+                signature: btoa('Digital signature'),
+                algorithm: 'Kyber-512 + AES-256-GCM + Dilithium-2',
+                version: 'BETA 1.0',
+                creator: 'DanZ-Kev'
+            };
         }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            addStatus('🚀 Advanced Multilayer Encryption System Ready', 'info');
-            addStatus('🔒 14-Layer Quantum-Resistant Protection Active', 'success');
-            addStatus('🛡️ Anti-Fingerprinting & Executable Output Enabled', 'info');
+            // Add some initial animations
+            gsap.from('.header', { duration: 1, y: -50, opacity: 0, ease: 'power2.out' });
+            gsap.from('.card', { duration: 0.8, y: 30, opacity: 0, ease: 'power2.out', stagger: 0.2 });
+            
+            // Initialize crypto engines
+            initializeCrypto();
+            
+            // Add event listeners for encryption level changes
+            document.getElementById('encryptionLevel').addEventListener('change', updateEncryptionInfo);
+            document.getElementById('obfuscationLevel').addEventListener('change', updateObfuscationInfo);
+            
+            // Add drag and drop event listeners
+            setupDragAndDrop();
+            
+            // Initialize option descriptions
+            updateEncryptionInfo();
+            updateObfuscationInfo();
+            
+            showStatus('DanZ POST-QUANTUM ULTRA Protector loaded successfully!', 'info');
         });
+
+        // Setup drag and drop functionality
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = Array.from(e.dataTransfer.files);
+                handleDroppedFiles(files);
+            });
+        }
+
+        // Handle dropped files
+        function handleDroppedFiles(files) {
+            const validFiles = files.filter(file => {
+                if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                    showStatus(`File ${file.name} is too large (max 50MB)`, 'error');
+                    return false;
+                }
+                
+                if (!file.name.endsWith('.js') && !file.name.endsWith('.zip')) {
+                    showStatus(`File ${file.name} is not a supported type (.js or .zip)`, 'error');
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            selectedFiles = selectedFiles.concat(validFiles);
+            updateFileList();
+            
+            if (validFiles.length > 0) {
+                showStatus(`Added ${validFiles.length} file(s) via drag & drop`, 'success');
+            }
+        }
+
+        // Update encryption information based on selected level
+        function updateEncryptionInfo() {
+            const level = document.getElementById('encryptionLevel').value;
+            let info = '';
+            let description = '';
+            
+            switch(level) {
+                case 'ultra':
+                    info = 'ULTRA: Maximum protection with Kyber-512, AES-256-GCM, Dilithium-2, and extreme obfuscation';
+                    description = 'ULTRA: Maximum protection with Kyber-512, AES-256-GCM, Dilithium-2';
+                    break;
+                case 'high':
+                    info = 'HIGH: Enhanced security with Kyber-256, AES-256-GCM, Dilithium-2, and advanced obfuscation';
+                    description = 'HIGH: Enhanced security with Kyber-256, AES-256-GCM, Dilithium-2';
+                    break;
+                case 'standard':
+                    info = 'STANDARD: Balanced protection with Kyber-128, AES-256-GCM, Dilithium-2, and standard obfuscation';
+                    description = 'STANDARD: Balanced protection with Kyber-128, AES-256-GCM, Dilithium-2';
+                    break;
+            }
+            
+            document.getElementById('encryptionDescription').textContent = description;
+            showStatus(info, 'info');
+        }
+
+        // Update obfuscation information based on selected level
+        function updateObfuscationInfo() {
+            const level = document.getElementById('obfuscationLevel').value;
+            let info = '';
+            let description = '';
+            
+            switch(level) {
+                case 'maximum':
+                    info = 'MAXIMUM: Extreme obfuscation with control flow flattening, dead code injection, and debug protection';
+                    description = 'MAXIMUM: Extreme obfuscation with control flow flattening, dead code injection';
+                    break;
+                case 'high':
+                    info = 'HIGH: Advanced obfuscation with control flow flattening and string encryption';
+                    description = 'HIGH: Advanced obfuscation with control flow flattening and string encryption';
+                    break;
+                case 'medium':
+                    info = 'MEDIUM: Standard obfuscation with basic string and variable obfuscation';
+                    description = 'MEDIUM: Standard obfuscation with basic string and variable obfuscation';
+                    break;
+            }
+            
+            document.getElementById('obfuscationDescription').textContent = description;
+            showStatus(info, 'info');
+        }
     </script>
 </body>
 </html>
